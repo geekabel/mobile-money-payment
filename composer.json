@@ -1,5 +1,6 @@
 {
     "name": "geekabel/mobile-money-payment",
+    "description": "A flexible and extensible PHP package for integrating mobile money payment services, supporting Tmoney and Flooz payment providers.",
     "type": "library",
     "license": "MIT",
     "require": {
@@ -31,6 +32,14 @@
             "name": "Godwin K.",
             "email": "koffigodwin96@gmail.com"
         }
+    ],
+    "keywords": [
+        "mobile money",
+        "payment",
+        "tmoney",
+        "flooz",
+        "php",
+        "symfony"
     ],
     "minimum-stability": "stable"
 }

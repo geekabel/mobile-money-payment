@@ -179,7 +179,7 @@ $tmoneyService = new TmoneyService(
 ```
 ## Symfony Integration
 
-For detailed instructions on how to integrate this package with Symfony 6.4, 7.0, 7.1, and superior versions, please refer to our [Symfony Integration Guide](SYMFONY_INTEGRATION.md).
+For detailed instructions on how to integrate this package with Symfony 6.4, 7.0, 7.1, and superior versions, please refer to our [Symfony Integration Guide](docs/SYMFONY_INTEGRATION.md).
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
