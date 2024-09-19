@@ -1,0 +1,33 @@
+image: php:8.2
+
+stages:
+  - test
+  - quality
+
+cache:
+  paths:
+    - vendor/
+
+before_script:
+  - apt-get update -yqq
+  - apt-get install -yqq git unzip libzip-dev
+  - docker-php-ext-install zip
+  - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+  - composer install
+
+test:
+  stage: test
+  script:
+    - vendor/bin/phpunit
+
+code_quality:
+  stage: quality
+  script:
+    - vendor/bin/php-cs-fixer fix --dry-run --diff
+    - vendor/bin/rector process src --dry-run
+
+security_check:
+  stage: quality
+  script:
+    - composer require --dev symfony/security-checker
+    - php vendor/bin/security-checker security:check composer.lock

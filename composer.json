@@ -1,0 +1,36 @@
+{
+    "name": "geekabel/mobile-money-payment",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "symfony/http-client": "^7.1",
+        "symfony/uid": "^7.1"
+    },
+    "require-dev": {
+        "rector/rector": "^0.19.8",
+        "phpunit/phpunit": "^10",
+        "friendsofphp/php-cs-fixer": "^3.14"
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "cs-fix": "vendor/bin/php-cs-fixer fix",
+        "rector": "vendor/bin/rector process src"
+    },
+    "autoload": {
+        "psr-4": {
+            "Geekabel\\MobileMoneyPayment\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Geekabel\\MobileMoneyPayment\\Tests\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Godwin K.",
+            "email": "koffigodwin96@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable"
+}

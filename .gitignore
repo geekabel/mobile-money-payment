@@ -1,0 +1,61 @@
+# Composer
+/vendor/
+composer.lock
+
+# PHPUnit
+/.phpunit.cache/
+/.phpunit.result.cache
+
+# PHP-CS-Fixer
+/.php-cs-fixer.cache
+
+# PHPStorm
+.idea/
+
+# VSCode
+.vscode/
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# Node (in case you use any Node.js tools)
+node_modules/
+
+# Log files
+*.log
+
+# Cache files
+*.cache
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Build directories
+/build/
+/dist/
+
+# Temporary files
+*.tmp
+*.swp
+*.swo
+
+# Operating System Files
+*.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# PHP files
+*.phar
