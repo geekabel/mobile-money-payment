@@ -2,14 +2,11 @@
 
 namespace Geekabel\MobileMoneyPayment\Tests\Service;
 
-
-use Psr\Log\LoggerInterface;
-use PHPUnit\Framework\TestCase;
-use Symfony\Component\HttpClient\MockHttpClient;
-use Symfony\Contracts\HttpClient\ResponseInterface;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Geekabel\MobileMoneyPayment\Model\PaymentResponse;
 use Geekabel\MobileMoneyPayment\Service\TmoneyService;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
 class TmoneyServiceTest extends TestCase
@@ -39,8 +36,8 @@ class TmoneyServiceTest extends TestCase
             new MockResponse(json_encode([
                 'code' => '0',
                 'message' => 'Success',
-                'refTmoney' => 'TM123456'
-            ]))
+                'refTmoney' => 'TM123456',
+            ])),
         ]);
 
         $result = $this->tmoneyService->pay('1234567890', 100.00, 'REF123', 'Test payment');
@@ -56,8 +53,8 @@ class TmoneyServiceTest extends TestCase
             new MockResponse(json_encode(['data' => ['token' => 'mock_token']])),
             new MockResponse(json_encode([
                 'code' => '1',
-                'message' => 'Payment failed'
-            ]))
+                'message' => 'Payment failed',
+            ])),
         ]);
 
         $result = $this->tmoneyService->pay('1234567890', 100.00, 'REF123', 'Test payment');
@@ -74,8 +71,8 @@ class TmoneyServiceTest extends TestCase
             new MockResponse(json_encode([
                 'code' => '0',
                 'message' => 'Success',
-                'refTmoney' => 'TM123456'
-            ]))
+                'refTmoney' => 'TM123456',
+            ])),
         ]);
 
         $result = $this->tmoneyService->checkStatus('REF123');
@@ -91,8 +88,8 @@ class TmoneyServiceTest extends TestCase
             new MockResponse(json_encode(['data' => ['token' => 'mock_token']])),
             new MockResponse(json_encode([
                 'code' => '1',
-                'message' => 'Pending'
-            ]))
+                'message' => 'Pending',
+            ])),
         ]);
 
         $result = $this->tmoneyService->checkStatus('REF123');

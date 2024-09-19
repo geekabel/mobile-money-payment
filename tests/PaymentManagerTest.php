@@ -2,12 +2,11 @@
 
 namespace Geekabel\MobileMoneyPayment\Tests;
 
-
-use PHPUnit\Framework\TestCase;
-use Geekabel\MobileMoneyPayment\PaymentManager;
-use Geekabel\MobileMoneyPayment\Model\PaymentResponse;
 use Geekabel\MobileMoneyPayment\Exception\PaymentException;
 use Geekabel\MobileMoneyPayment\Interface\PaymentServiceInterface;
+use Geekabel\MobileMoneyPayment\Model\PaymentResponse;
+use Geekabel\MobileMoneyPayment\PaymentManager;
+use PHPUnit\Framework\TestCase;
 
 class PaymentManagerTest extends TestCase
 {
@@ -18,11 +17,11 @@ class PaymentManagerTest extends TestCase
     protected function setUp(): void
     {
         $this->paymentManager = new PaymentManager();
-        
+
         // Create stub implementations instead of mocks
         $this->mockTmoneyService = $this->createStub(PaymentServiceInterface::class);
         $this->mockFloozService = $this->createStub(PaymentServiceInterface::class);
-        
+
         $this->paymentManager->addPaymentService('tmoney', $this->mockTmoneyService);
         $this->paymentManager->addPaymentService('flooz', $this->mockFloozService);
     }
@@ -33,7 +32,7 @@ class PaymentManagerTest extends TestCase
         $this->mockTmoneyService->method('pay')->willReturn($expectedResponse);
 
         $response = $this->paymentManager->pay('tmoney', '1234567890', 100.00, 'REF123', 'Test payment');
-        
+
         $this->assertSame($expectedResponse, $response);
     }
 
@@ -49,7 +48,7 @@ class PaymentManagerTest extends TestCase
         $this->mockFloozService->method('checkStatus')->willReturn($expectedResponse);
 
         $response = $this->paymentManager->checkStatus('flooz', 'REF123');
-        
+
         $this->assertSame($expectedResponse, $response);
     }
 
@@ -68,7 +67,7 @@ class PaymentManagerTest extends TestCase
         $newMockService->method('pay')->willReturn($expectedResponse);
 
         $response = $this->paymentManager->pay('new_service', '1234567890', 100.00, 'REF123', 'Test payment');
-        
+
         $this->assertSame($expectedResponse, $response);
     }
 }

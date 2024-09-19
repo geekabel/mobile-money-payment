@@ -2,17 +2,13 @@
 
 namespace MobileMoneyPayment\Tests\Service;
 
-
-use Psr\Log\LoggerInterface;
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
-use Symfony\Component\HttpClient\MockHttpClient;
-use Symfony\Contracts\HttpClient\ResponseInterface;
-use Geekabel\MobileMoneyPayment\Service\FloozService;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
-use Geekabel\MobileMoneyPayment\Model\PaymentResponse;
-use Symfony\Component\HttpClient\Response\MockResponse;
 use Geekabel\MobileMoneyPayment\Interface\FloozCounterManagerInterface;
+use Geekabel\MobileMoneyPayment\Model\PaymentResponse;
+use Geekabel\MobileMoneyPayment\Service\FloozService;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpClient\MockHttpClient;
+use Symfony\Component\HttpClient\Response\MockResponse;
 
 class FloozServiceTest extends TestCase
 {
@@ -25,9 +21,11 @@ class FloozServiceTest extends TestCase
     {
         $this->httpClient = new MockHttpClient();
         $this->logger = $this->createMock(LoggerInterface::class);
-        $this->counterManager = new class implements FloozCounterManagerInterface {
+        $this->counterManager = new class () implements FloozCounterManagerInterface {
             private int $counter = 1049;
-            public function getAndIncrementCounter(): int {
+
+            public function getAndIncrementCounter(): int
+            {
                 return ++$this->counter;
             }
         };
@@ -51,8 +49,8 @@ class FloozServiceTest extends TestCase
             new MockResponse(json_encode([
                 'code' => '0',
                 'message' => 'Success',
-                'refid' => 'FL123456'
-            ]))
+                'refid' => 'FL123456',
+            ])),
         ]);
 
         $result = $this->floozService->pay('1234567890', 100.00, 'REF123', 'Test payment');
@@ -68,8 +66,8 @@ class FloozServiceTest extends TestCase
             new MockResponse(json_encode(['key' => 'mock_token'])),
             new MockResponse(json_encode([
                 'code' => '1',
-                'message' => 'Payment failed'
-            ]))
+                'message' => 'Payment failed',
+            ])),
         ]);
 
         $result = $this->floozService->pay('1234567890', 100.00, 'REF123', 'Test payment');
@@ -86,8 +84,8 @@ class FloozServiceTest extends TestCase
             new MockResponse(json_encode([
                 'code' => '0',
                 'message' => 'Success',
-                'refid' => 'FL123456'
-            ]))
+                'refid' => 'FL123456',
+            ])),
         ]);
 
         $result = $this->floozService->checkStatus('REF123');
@@ -103,8 +101,8 @@ class FloozServiceTest extends TestCase
             new MockResponse(json_encode(['key' => 'mock_token'])),
             new MockResponse(json_encode([
                 'code' => '1',
-                'message' => 'Pending'
-            ]))
+                'message' => 'Pending',
+            ])),
         ]);
 
         $result = $this->floozService->checkStatus('REF123');

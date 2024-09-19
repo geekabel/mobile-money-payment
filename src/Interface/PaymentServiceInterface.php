@@ -4,7 +4,6 @@ namespace Geekabel\MobileMoneyPayment\Interface;
 
 use Geekabel\MobileMoneyPayment\Model\PaymentResponse;
 
-
 interface PaymentServiceInterface
 {
     /**

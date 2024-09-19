@@ -1,11 +1,12 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Geekabel\MobileMoneyPayment;
 
-use Geekabel\MobileMoneyPayment\Model\PaymentResponse;
 use Geekabel\MobileMoneyPayment\Exception\PaymentException;
 use Geekabel\MobileMoneyPayment\Interface\PaymentServiceInterface;
+use Geekabel\MobileMoneyPayment\Model\PaymentResponse;
 
 class PaymentManager
 {
@@ -36,6 +37,7 @@ class PaymentManager
     public function pay(string $serviceName, string $phone, float $amount, string $reference, string $description = ''): PaymentResponse
     {
         $service = $this->getPaymentService($serviceName);
+
         return $service->pay($phone, $amount, $reference, $description);
     }
 
@@ -50,6 +52,7 @@ class PaymentManager
     public function checkStatus(string $serviceName, string $reference): PaymentResponse
     {
         $service = $this->getPaymentService($serviceName);
+
         return $service->checkStatus($reference);
     }
 
@@ -62,9 +65,10 @@ class PaymentManager
      */
     private function getPaymentService(string $name): PaymentServiceInterface
     {
-        if (!isset($this->paymentServices[$name])) {
+        if (! isset($this->paymentServices[$name])) {
             throw new PaymentException("Payment service '$name' not found.");
         }
+
         return $this->paymentServices[$name];
     }
 }

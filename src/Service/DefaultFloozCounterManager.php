@@ -7,8 +7,6 @@ namespace Geekabel\MobileMoneyPayment\Service;
 use Geekabel\MobileMoneyPayment\Exception\PaymentException;
 use Geekabel\MobileMoneyPayment\Interface\FloozCounterManagerInterface;
 
-
-
 class DefaultFloozCounterManager implements FloozCounterManagerInterface
 {
     private string $counterFile;
@@ -21,7 +19,7 @@ class DefaultFloozCounterManager implements FloozCounterManagerInterface
     public function getAndIncrementCounter(): int
     {
         $fp = fopen($this->counterFile, 'c+');
-        if (!$fp) {
+        if (! $fp) {
             throw new PaymentException("Unable to open counter file");
         }
 

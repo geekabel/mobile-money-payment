@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Geekabel\MobileMoneyPayment\Service;
 
+use Geekabel\MobileMoneyPayment\Exception\PaymentException;
+use Geekabel\MobileMoneyPayment\Interface\PaymentServiceInterface;
+use Geekabel\MobileMoneyPayment\Model\PaymentResponse;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
-use Geekabel\MobileMoneyPayment\Model\PaymentResponse;
-use Geekabel\MobileMoneyPayment\Exception\PaymentException;
-use Geekabel\MobileMoneyPayment\Interface\PaymentServiceInterface;
 
 class TmoneyService implements PaymentServiceInterface
 {
@@ -40,7 +40,7 @@ class TmoneyService implements PaymentServiceInterface
     {
         try {
             $token = $this->getAccessToken();
-            if (!$token) {
+            if (! $token) {
                 throw new PaymentException("Failed to obtain access token");
             }
 
@@ -50,7 +50,7 @@ class TmoneyService implements PaymentServiceInterface
                 "montant" => $amount,
                 "refCommande" => $reference,
                 "dateHeureRequete" => (new \DateTime())->format('Y-m-d H:i:s'),
-                "description" => $description
+                "description" => $description,
             ];
 
             $response = $this->client->request(
@@ -61,7 +61,7 @@ class TmoneyService implements PaymentServiceInterface
                     'headers' => [
                         'Accept' => 'application/json',
                         'Content-Type' => 'application/json',
-                        "Authorization" => "Bearer " . $token
+                        "Authorization" => "Bearer " . $token,
                     ],
                 ]
             );
@@ -78,6 +78,7 @@ class TmoneyService implements PaymentServiceInterface
             );
         } catch (\Exception $e) {
             $this->logger->error("Tmoney Debit error: " . $e->getMessage());
+
             return new PaymentResponse(
                 success: false,
                 message: $e->getMessage(),
@@ -90,7 +91,7 @@ class TmoneyService implements PaymentServiceInterface
     {
         try {
             $token = $this->getAccessToken();
-            if (!$token) {
+            if (! $token) {
                 throw new PaymentException("Failed to obtain access token");
             }
 
@@ -101,7 +102,7 @@ class TmoneyService implements PaymentServiceInterface
                     'headers' => [
                         'Accept' => 'application/json',
                         'Content-Type' => 'application/json',
-                        "Authorization" => "Bearer " . $token
+                        "Authorization" => "Bearer " . $token,
                     ],
                 ]
             );
@@ -118,6 +119,7 @@ class TmoneyService implements PaymentServiceInterface
             );
         } catch (\Exception $e) {
             $this->logger->error("Tmoney Status Check error: " . $e->getMessage());
+
             return new PaymentResponse(
                 success: false,
                 message: $e->getMessage(),
@@ -135,7 +137,7 @@ class TmoneyService implements PaymentServiceInterface
                 [
                     'json' => [
                         "nomUtilisateur" => $this->username,
-                        "motDePasse" => $this->password
+                        "motDePasse" => $this->password,
                     ],
                     'headers' => [
                         'Accept' => 'application/json',
@@ -145,9 +147,11 @@ class TmoneyService implements PaymentServiceInterface
             );
 
             $result = $response->toArray();
+
             return $result['data']['token'] ?? null;
         } catch (\Throwable $th) {
             $this->logger->error("Tmoney Token error: " . $th->getMessage());
+
             return null;
         }
     }

@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Geekabel\MobileMoneyPayment\Service;
 
-
+use Geekabel\MobileMoneyPayment\Exception\PaymentException;
+use Geekabel\MobileMoneyPayment\Interface\FloozCounterManagerInterface;
+use Geekabel\MobileMoneyPayment\Interface\PaymentServiceInterface;
+use Geekabel\MobileMoneyPayment\Model\PaymentResponse;
 use Psr\Log\LoggerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
-use Geekabel\MobileMoneyPayment\Model\PaymentResponse;
-use Geekabel\MobileMoneyPayment\Exception\PaymentException;
-use Geekabel\MobileMoneyPayment\Interface\PaymentServiceInterface;
-use Geekabel\MobileMoneyPayment\Interface\FloozCounterManagerInterface;
 
 class FloozService implements PaymentServiceInterface
 {
@@ -50,7 +49,7 @@ class FloozService implements PaymentServiceInterface
     {
         try {
             $token = $this->getAccessToken();
-            if (!$token) {
+            if (! $token) {
                 throw new PaymentException("Failed to obtain access token");
             }
 
@@ -60,7 +59,7 @@ class FloozService implements PaymentServiceInterface
                 "mrchrefid" => $reference,
                 "mrchname" => $this->mrchname,
                 "amount" => (string) $amount,
-                "partnermsisdn" => $this->partnermsisdn
+                "partnermsisdn" => $this->partnermsisdn,
             ];
 
             $response = $this->client->request(
@@ -70,7 +69,7 @@ class FloozService implements PaymentServiceInterface
                     'json' => $data,
                     'headers' => [
                         'Authorization' => $token,
-                        'Content-Type' => 'application/json'
+                        'Content-Type' => 'application/json',
                     ],
                 ]
             );
@@ -87,6 +86,7 @@ class FloozService implements PaymentServiceInterface
             );
         } catch (\Exception $e) {
             $this->logger->error("Flooz Debit error: " . $e->getMessage());
+
             return new PaymentResponse(
                 success: false,
                 message: $e->getMessage(),
@@ -99,13 +99,13 @@ class FloozService implements PaymentServiceInterface
     {
         try {
             $token = $this->getAccessToken();
-            if (!$token) {
+            if (! $token) {
                 throw new PaymentException("Failed to obtain access token");
             }
 
             $data = [
                 "mrchrefid" => $reference,
-                "partnermsisdn" => $this->partnermsisdn
+                "partnermsisdn" => $this->partnermsisdn,
             ];
 
             $response = $this->client->request(
@@ -132,6 +132,7 @@ class FloozService implements PaymentServiceInterface
             );
         } catch (\Exception $e) {
             $this->logger->error("Flooz Status Check error: " . $e->getMessage());
+
             return new PaymentResponse(
                 success: false,
                 message: $e->getMessage(),
@@ -149,15 +150,17 @@ class FloozService implements PaymentServiceInterface
                 $this->apiUrl . "/token?index=$counter&username=$this->username&password=$this->password",
                 [
                     'headers' => [
-                        'Content-Type' => 'application/json'
+                        'Content-Type' => 'application/json',
                     ],
                 ]
             );
 
             $result = $response->toArray();
+
             return $result['key'] ?? null;
         } catch (\Exception $e) {
             $this->logger->error("Flooz Token error: " . $e->getMessage());
+
             return null;
         }
     }
