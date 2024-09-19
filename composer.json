@@ -13,9 +13,9 @@
         "friendsofphp/php-cs-fixer": "^3.14"
     },
     "scripts": {
-        "test": "vendor/bin/phpunit",
+        "test": "vendor/bin/phpunit tests/",
         "cs-fix": "vendor/bin/php-cs-fixer fix",
-        "rector": "vendor/bin/rector process src"
+        "rector": "vendor/bin/rector process src/"
     },
     "autoload": {
         "psr-4": {
