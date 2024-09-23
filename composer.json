@@ -4,7 +4,7 @@
     "type": "library",
     "license": "MIT",
     "require": {
-        "php": "8.2",
+        "php": ">=8.2",
         "symfony/http-client": "^7.1",
         "symfony/uid": "^7.1"
     },
