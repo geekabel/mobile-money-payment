@@ -4,13 +4,14 @@
     "type": "library",
     "license": "MIT",
     "require": {
+        "php": "8.2",
         "symfony/http-client": "^7.1",
         "symfony/uid": "^7.1"
     },
     "require-dev": {
-        "rector/rector": "^0.19.8",
+        "rector/rector": "^1.0",
         "phpunit/phpunit": "^10",
-        "friendsofphp/php-cs-fixer": "^3.14"
+        "friendsofphp/php-cs-fixer": "^3.0"
     },
     "scripts": {
         "test": "vendor/bin/phpunit tests/",
