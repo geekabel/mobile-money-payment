@@ -16,7 +16,7 @@ return RectorConfig::configure()
         DisallowedEmptyRuleFixerRector::class,
     ])->withSets([
         // global
-        SetList::PHP_82,
+        SetList::PHP_83,
         SetList::CODE_QUALITY,
         SetList::PRIVATIZATION,
         SetList::INSTANCEOF,

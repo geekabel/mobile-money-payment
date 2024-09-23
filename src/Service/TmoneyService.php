@@ -40,7 +40,7 @@ class TmoneyService implements PaymentServiceInterface
     {
         try {
             $token = $this->getAccessToken();
-            if (! $token) {
+            if ($token === null || $token === '' || $token === '0') {
                 throw new PaymentException("Failed to obtain access token");
             }
 
@@ -91,7 +91,7 @@ class TmoneyService implements PaymentServiceInterface
     {
         try {
             $token = $this->getAccessToken();
-            if (! $token) {
+            if ($token === null || $token === '' || $token === '0') {
                 throw new PaymentException("Failed to obtain access token");
             }
 
