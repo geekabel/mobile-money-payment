@@ -48,7 +48,13 @@ jobs:
     - name: Run Rector
       run: composer run-script rector -- --dry-run
 
-    - name: Security check
+    - name: Install Symfony CLI
       run: |
-        composer require --dev symfony/security-checker
-        php vendor/bin/security-checker security:check composer.lock
+        curl -sS https://get.symfony.com/cli/installer | bash
+        mv /home/runner/.symfony5/bin/symfony /usr/local/bin/symfony
+
+    - name: Security check
+      run: symfony security:check
+
+    - name: Check for outdated dependencies
+      run: symfony check:security
