@@ -2,14 +2,14 @@
 
 namespace MobileMoneyPayment\Tests\Service;
 
-use Psr\Log\LoggerInterface;
-use PHPUnit\Framework\TestCase;
-use Symfony\Component\HttpClient\MockHttpClient;
 use Geekabel\MobileMoneyPayment\Enum\PaymentStatus;
-use Geekabel\MobileMoneyPayment\Service\FloozService;
-use Geekabel\MobileMoneyPayment\Model\PaymentResponse;
-use Symfony\Component\HttpClient\Response\MockResponse;
 use Geekabel\MobileMoneyPayment\Interface\FloozCounterManagerInterface;
+use Geekabel\MobileMoneyPayment\Model\PaymentResponse;
+use Geekabel\MobileMoneyPayment\Service\FloozService;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpClient\MockHttpClient;
+use Symfony\Component\HttpClient\Response\MockResponse;
 
 class FloozServiceTest extends TestCase
 {
@@ -110,6 +110,6 @@ class FloozServiceTest extends TestCase
 
         $this->assertInstanceOf(PaymentResponse::class, $result);
         $this->assertFalse($result->isSuccess());
-        $this->assertEquals(PaymentStatus::PENDING->toString(), $result->status);
+        $this->assertEquals(PaymentStatus::PENDING, $result->status);
     }
 }

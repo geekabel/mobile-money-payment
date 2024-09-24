@@ -131,7 +131,7 @@ class FloozService implements PaymentServiceInterface
                 success: $result['code'] === '0',
                 message: $result['message'],
                 transactionId: $result['refid'] ?? null,
-                status: $result['code'] === '0' ? PaymentStatus::SUCCESS : PaymentStatus::FAILURE,
+                status: $result['code'] === '0' ? PaymentStatus::SUCCESS : PaymentStatus::PENDING,
                 rawResponse: $result
             );
         } catch (\Exception $e) {

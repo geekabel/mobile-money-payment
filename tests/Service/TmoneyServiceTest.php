@@ -2,12 +2,12 @@
 
 namespace Geekabel\MobileMoneyPayment\Tests\Service;
 
-use Psr\Log\LoggerInterface;
-use PHPUnit\Framework\TestCase;
-use Symfony\Component\HttpClient\MockHttpClient;
 use Geekabel\MobileMoneyPayment\Enum\PaymentStatus;
 use Geekabel\MobileMoneyPayment\Model\PaymentResponse;
 use Geekabel\MobileMoneyPayment\Service\TmoneyService;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
 class TmoneyServiceTest extends TestCase

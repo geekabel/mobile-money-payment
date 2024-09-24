@@ -2,12 +2,12 @@
 
 namespace Geekabel\MobileMoneyPayment\Tests;
 
-use PHPUnit\Framework\TestCase;
-use Geekabel\MobileMoneyPayment\PaymentManager;
 use Geekabel\MobileMoneyPayment\Enum\PaymentStatus;
-use Geekabel\MobileMoneyPayment\Model\PaymentResponse;
 use Geekabel\MobileMoneyPayment\Exception\PaymentException;
 use Geekabel\MobileMoneyPayment\Interface\PaymentServiceInterface;
+use Geekabel\MobileMoneyPayment\Model\PaymentResponse;
+use Geekabel\MobileMoneyPayment\PaymentManager;
+use PHPUnit\Framework\TestCase;
 
 class PaymentManagerTest extends TestCase
 {
@@ -29,7 +29,7 @@ class PaymentManagerTest extends TestCase
 
     public function testPayWithValidService()
     {
-        $expectedResponse = new PaymentResponse(true, 'Success',PaymentStatus::SUCCESS, 'TRX123', );
+        $expectedResponse = new PaymentResponse(true, 'Success', PaymentStatus::SUCCESS, 'TRX123', );
         $this->mockTmoneyService->method('pay')->willReturn($expectedResponse);
 
         $response = $this->paymentManager->pay('tmoney', '1234567890', 100.00, 'REF123', 'Test payment');
@@ -45,7 +45,7 @@ class PaymentManagerTest extends TestCase
 
     public function testCheckStatusWithValidService()
     {
-        $expectedResponse = new PaymentResponse(true, 'Success',PaymentStatus::SUCCESS, 'TRX123');
+        $expectedResponse = new PaymentResponse(true, 'Success', PaymentStatus::SUCCESS, 'TRX123');
         $this->mockFloozService->method('checkStatus')->willReturn($expectedResponse);
 
         $response = $this->paymentManager->checkStatus('flooz', 'REF123');
@@ -64,7 +64,7 @@ class PaymentManagerTest extends TestCase
         $newMockService = $this->createStub(PaymentServiceInterface::class);
         $this->paymentManager->addPaymentService('new_service', $newMockService);
 
-        $expectedResponse = new PaymentResponse(true, 'Success',PaymentStatus::SUCCESS, 'TRX123');
+        $expectedResponse = new PaymentResponse(true, 'Success', PaymentStatus::SUCCESS, 'TRX123');
         $newMockService->method('pay')->willReturn($expectedResponse);
 
         $response = $this->paymentManager->pay('new_service', '1234567890', 100.00, 'REF123', 'Test payment');

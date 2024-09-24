@@ -15,8 +15,6 @@ enum PaymentStatus: string
     case REFUNDED = 'REFUNDED';
     case PARTIALLY_REFUNDED = 'PARTIALLY_REFUNDED';
 
-
-
     /**
      * Convert the enum to a string representation.
      *
