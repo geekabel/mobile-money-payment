@@ -2,6 +2,7 @@
 
 namespace Geekabel\MobileMoneyPayment\Tests\Service;
 
+use Geekabel\MobileMoneyPayment\Enum\PaymentStatus;
 use Geekabel\MobileMoneyPayment\Model\PaymentResponse;
 use Geekabel\MobileMoneyPayment\Service\TmoneyService;
 use PHPUnit\Framework\TestCase;
@@ -43,7 +44,7 @@ class TmoneyServiceTest extends TestCase
         $result = $this->tmoneyService->pay('1234567890', 100.00, 'REF123', 'Test payment');
 
         $this->assertInstanceOf(PaymentResponse::class, $result);
-        $this->assertTrue($result->success);
+        $this->assertTrue($result->isSuccess());
         $this->assertEquals('TM123456', $result->transactionId);
     }
 
@@ -60,7 +61,7 @@ class TmoneyServiceTest extends TestCase
         $result = $this->tmoneyService->pay('1234567890', 100.00, 'REF123', 'Test payment');
 
         $this->assertInstanceOf(PaymentResponse::class, $result);
-        $this->assertFalse($result->success);
+        $this->assertFalse($result->isSuccess());
         $this->assertEquals('Payment failed', $result->message);
     }
 
@@ -78,8 +79,8 @@ class TmoneyServiceTest extends TestCase
         $result = $this->tmoneyService->checkStatus('REF123');
 
         $this->assertInstanceOf(PaymentResponse::class, $result);
-        $this->assertTrue($result->success);
-        $this->assertEquals('SUCCESS', $result->status);
+        $this->assertTrue($result->isSuccess());
+        $this->assertEquals(PaymentStatus::SUCCESS, $result->status);
     }
 
     public function testCheckStatusPending()
@@ -95,7 +96,7 @@ class TmoneyServiceTest extends TestCase
         $result = $this->tmoneyService->checkStatus('REF123');
 
         $this->assertInstanceOf(PaymentResponse::class, $result);
-        $this->assertFalse($result->success);
-        $this->assertEquals('PENDING', $result->status);
+        $this->assertFalse($result->isSuccess());
+        $this->assertEquals(PaymentStatus::PENDING, $result->status);
     }
 }

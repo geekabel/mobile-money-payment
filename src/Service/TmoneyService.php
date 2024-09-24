@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Geekabel\MobileMoneyPayment\Service;
 
+use Geekabel\MobileMoneyPayment\Enum\PaymentStatus;
 use Geekabel\MobileMoneyPayment\Exception\PaymentException;
 use Geekabel\MobileMoneyPayment\Interface\PaymentServiceInterface;
 use Geekabel\MobileMoneyPayment\Model\PaymentResponse;
@@ -73,7 +74,7 @@ class TmoneyService implements PaymentServiceInterface
                 success: $result['code'] === '0',
                 message: $result['message'],
                 transactionId: $result['refTmoney'] ?? null,
-                status: $result['code'] === '0' ? 'SUCCESS' : 'FAILURE',
+                status: $result['code'] === '0' ? PaymentStatus::SUCCESS : PaymentStatus::FAILURE,
                 rawResponse: $result
             );
         } catch (\Exception $e) {
@@ -82,7 +83,8 @@ class TmoneyService implements PaymentServiceInterface
             return new PaymentResponse(
                 success: false,
                 message: $e->getMessage(),
-                status: 'ERROR'
+                transactionId: null,
+                status: PaymentStatus::ERROR
             );
         }
     }
@@ -114,7 +116,7 @@ class TmoneyService implements PaymentServiceInterface
                 success: $result['code'] === '0',
                 message: $result['message'],
                 transactionId: $result['refTmoney'] ?? null,
-                status: $result['code'] === '0' ? 'SUCCESS' : 'PENDING',
+                status: $result['code'] === '0' ? PaymentStatus::SUCCESS : PaymentStatus::PENDING,
                 rawResponse: $result
             );
         } catch (\Exception $e) {
@@ -123,7 +125,7 @@ class TmoneyService implements PaymentServiceInterface
             return new PaymentResponse(
                 success: false,
                 message: $e->getMessage(),
-                status: 'ERROR'
+                status: PaymentStatus::ERROR
             );
         }
     }
