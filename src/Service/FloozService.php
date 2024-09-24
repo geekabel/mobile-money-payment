@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Geekabel\MobileMoneyPayment\Service;
 
+use Geekabel\MobileMoneyPayment\Enum\PaymentStatus;
 use Geekabel\MobileMoneyPayment\Exception\PaymentException;
 use Geekabel\MobileMoneyPayment\Interface\FloozCounterManagerInterface;
 use Geekabel\MobileMoneyPayment\Interface\PaymentServiceInterface;
@@ -81,7 +82,7 @@ class FloozService implements PaymentServiceInterface
                 success: $result['code'] === '0',
                 message: $result['message'],
                 transactionId: $result['refid'] ?? null,
-                status: $result['code'] === '0' ? 'SUCCESS' : 'FAILURE',
+                status: $result['code'] === '0' ? PaymentStatus::SUCCESS : PaymentStatus::FAILURE,
                 rawResponse: $result
             );
         } catch (\Exception $e) {
@@ -90,7 +91,7 @@ class FloozService implements PaymentServiceInterface
             return new PaymentResponse(
                 success: false,
                 message: $e->getMessage(),
-                status: 'ERROR'
+                status: PaymentStatus::ERROR
             );
         }
     }
@@ -127,7 +128,7 @@ class FloozService implements PaymentServiceInterface
                 success: $result['code'] === '0',
                 message: $result['message'],
                 transactionId: $result['refid'] ?? null,
-                status: $result['code'] === '0' ? 'SUCCESS' : 'PENDING',
+                status: $result['code'] === '0' ? PaymentStatus::SUCCESS : PaymentStatus::FAILURE,
                 rawResponse: $result
             );
         } catch (\Exception $e) {
@@ -136,7 +137,7 @@ class FloozService implements PaymentServiceInterface
             return new PaymentResponse(
                 success: false,
                 message: $e->getMessage(),
-                status: 'ERROR'
+                status: PaymentStatus::ERROR
             );
         }
     }

@@ -2,13 +2,14 @@
 
 namespace MobileMoneyPayment\Tests\Service;
 
-use Geekabel\MobileMoneyPayment\Interface\FloozCounterManagerInterface;
-use Geekabel\MobileMoneyPayment\Model\PaymentResponse;
-use Geekabel\MobileMoneyPayment\Service\FloozService;
-use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
+use Geekabel\MobileMoneyPayment\Enum\PaymentStatus;
+use Geekabel\MobileMoneyPayment\Service\FloozService;
+use Geekabel\MobileMoneyPayment\Model\PaymentResponse;
 use Symfony\Component\HttpClient\Response\MockResponse;
+use Geekabel\MobileMoneyPayment\Interface\FloozCounterManagerInterface;
 
 class FloozServiceTest extends TestCase
 {
@@ -56,7 +57,7 @@ class FloozServiceTest extends TestCase
         $result = $this->floozService->pay('1234567890', 100.00, 'REF123', 'Test payment');
 
         $this->assertInstanceOf(PaymentResponse::class, $result);
-        $this->assertTrue($result->success);
+        $this->assertTrue($result->isSuccess());
         $this->assertEquals('FL123456', $result->transactionId);
     }
 
@@ -73,7 +74,7 @@ class FloozServiceTest extends TestCase
         $result = $this->floozService->pay('1234567890', 100.00, 'REF123', 'Test payment');
 
         $this->assertInstanceOf(PaymentResponse::class, $result);
-        $this->assertFalse($result->success);
+        $this->assertFalse($result->isSuccess());
         $this->assertEquals('Payment failed', $result->message);
     }
 
@@ -91,8 +92,8 @@ class FloozServiceTest extends TestCase
         $result = $this->floozService->checkStatus('REF123');
 
         $this->assertInstanceOf(PaymentResponse::class, $result);
-        $this->assertTrue($result->success);
-        $this->assertEquals('SUCCESS', $result->status);
+        $this->assertTrue($result->isSuccess());
+        $this->assertEquals(PaymentStatus::SUCCESS, $result->status);
     }
 
     public function testCheckStatusPending()
@@ -108,7 +109,7 @@ class FloozServiceTest extends TestCase
         $result = $this->floozService->checkStatus('REF123');
 
         $this->assertInstanceOf(PaymentResponse::class, $result);
-        $this->assertFalse($result->success);
-        $this->assertEquals('PENDING', $result->status);
+        $this->assertFalse($result->isSuccess());
+        $this->assertEquals(PaymentStatus::PENDING, $result->status);
     }
 }

@@ -6,7 +6,8 @@
     "require": {
         "php": ">=8.2",
         "symfony/http-client": "^7.1",
-        "symfony/uid": "^7.1"
+        "symfony/uid": "^7.1",
+        "endroid/qr-code": "^5.0"
     },
     "require-dev": {
         "rector/rector": "^1.0",
@@ -16,7 +17,12 @@
     "scripts": {
         "test": "vendor/bin/phpunit tests/",
         "cs-fix": "vendor/bin/php-cs-fixer fix",
-        "rector": "vendor/bin/rector process src/"
+        "rector": "vendor/bin/rector process src/",
+        "check-all": [
+            "@test",
+            "@cs-fix",
+            "@rector"
+        ]
     },
     "autoload": {
         "psr-4": {
