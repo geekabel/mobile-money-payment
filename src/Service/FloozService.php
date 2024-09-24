@@ -76,7 +76,10 @@ class FloozService implements PaymentServiceInterface
             );
 
             $result = $response->toArray();
-            $this->logger->info("Flooz Debit || phone:$phone, amount:$amount, ref:$reference, response:" . json_encode($result));
+            $this->logger->info(
+                "Flooz Debit || phone:$phone, amount:$amount, 
+                ref:$reference, response:" . json_encode($result)
+            );
 
             return new PaymentResponse(
                 success: $result['code'] === '0',

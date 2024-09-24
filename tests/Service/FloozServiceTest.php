@@ -110,6 +110,6 @@ class FloozServiceTest extends TestCase
 
         $this->assertInstanceOf(PaymentResponse::class, $result);
         $this->assertFalse($result->isSuccess());
-        $this->assertEquals(PaymentStatus::PENDING, $result->status);
+        $this->assertEquals(PaymentStatus::PENDING->toString(), $result->status);
     }
 }
