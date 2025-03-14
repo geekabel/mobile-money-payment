@@ -42,7 +42,9 @@ $tmoneyService = new TmoneyService(
     'tmoney_username',
     'tmoney_password',
     'tmoney_alias',
-    'https://tmoney-api-url.com'
+    'https://tmoney-api-url.com',
+    'https://tmoney-cashout-api-url.com',
+    'https://tmoney-cashout-status-url.com'
 );
 
 $floozService = new FloozService(
@@ -68,7 +70,7 @@ $paymentManager->addService('flooz', $floozService);
 ```php
 $response = $paymentManager->pay('tmoney', '1234567890', 100.00, 'REF123', 'Payment for order #123');
 
-if ($response->success) {
+if ($response->isSuccess()) {
     echo "Payment successful! Transaction ID: " . $response->transactionId;
 } else {
     echo "Payment failed: " . $response->message;
@@ -80,7 +82,25 @@ if ($response->success) {
 ```php
 $status = $paymentManager->checkStatus('flooz', 'REF123');
 
-echo "Payment status: " . $status->status;
+echo "Payment status: " . $status->status->value;
+```
+
+### Using Tmoney Cashout (Send Money)
+
+```php
+// Direct access to the service
+$tmoneyService = $paymentManager->getService('tmoney');
+$response = $tmoneyService->cashOut('1234567890', 100.00, 'REF123', 'Sending funds to customer');
+
+if ($response->isSuccess()) {
+    echo "Money sent successfully! Transaction ID: " . $response->transactionId;
+} else {
+    echo "Transaction failed: " . $response->message;
+}
+
+// Check cashout status
+$statusResponse = $tmoneyService->cashOutStatus($response->transactionId);
+echo "Cashout status: " . $statusResponse->status->value;
 ```
 
 ## Extending the Package

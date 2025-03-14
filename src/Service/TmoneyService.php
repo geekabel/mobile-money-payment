@@ -8,6 +8,7 @@ use Geekabel\MobileMoneyPayment\Enum\PaymentStatus;
 use Geekabel\MobileMoneyPayment\Exception\PaymentException;
 use Geekabel\MobileMoneyPayment\Interface\PaymentServiceInterface;
 use Geekabel\MobileMoneyPayment\Model\PaymentResponse;
+use PhpParser\Node\Stmt\TryCatch;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -20,6 +21,8 @@ class TmoneyService implements PaymentServiceInterface
     private string $password;
     private string $alias;
     private string $apiUrl;
+    private string $cashOutUrl;
+    private string $cashOutStatusUrl;
 
     public function __construct(
         HttpClientInterface $client,
@@ -27,7 +30,9 @@ class TmoneyService implements PaymentServiceInterface
         string $username,
         string $password,
         string $alias,
-        string $apiUrl
+        string $apiUrl,
+        string $cashOutUrl,
+        string $cashOutStatusUrl
     ) {
         $this->client = $client;
         $this->logger = $logger;
@@ -35,6 +40,8 @@ class TmoneyService implements PaymentServiceInterface
         $this->password = $password;
         $this->alias = $alias;
         $this->apiUrl = $apiUrl;
+        $this->cashOutUrl = $cashOutUrl;
+        $this->cashOutStatusUrl = $cashOutStatusUrl;
     }
 
     public function pay(string $phone, float $amount, string $reference, string $description = ''): PaymentResponse
@@ -129,7 +136,107 @@ class TmoneyService implements PaymentServiceInterface
             );
         }
     }
+    public function cashOut(string $phone, float $amount, string $reference, string $description = 'Envoi de fond depuis inam'): PaymentResponse
+    {
+        try {
+            $token = $this->getAccessToken();
+            if ($token === null || $token === '' || $token === '0') {
+                throw new PaymentException("Failed to obtain access token");
+            }
 
+            $data = [
+                "idRequete" => Uuid::v4()->toRfc4122(),
+                "numeroClient" => "228" . $phone,
+                "montant" => $amount,
+                "refCommande" => $reference,
+                "dateHeureRequete" => (new \DateTime())->format('Y-m-d H:i:s'),
+                "description" => $description,
+            ];
+
+            $response = $this->client->request(
+                'POST',
+                $this->cashOutUrl,
+                [
+                    'json' => $data,
+                    'headers' => [
+                        'Accept' => 'application/json',
+                        'Content-Type' => 'application/json',
+                        "Authorization" => "Bearer " . $token,
+                    ],
+                ]
+            );
+
+            $result = $response->toArray();
+            $this->logger->info("Tmoney CashOut || phone:$phone, amount:$amount, ref:$reference, response:" . json_encode($result));
+
+            return new PaymentResponse(
+                success: $result['code'] === '0',
+                message: $result['message'] ?? 'Unknown response',
+                transactionId: $result['refTmoney'] ?? null,
+                status: $result['code'] === '0' ? PaymentStatus::SUCCESS : PaymentStatus::FAILURE,
+                rawResponse: $result
+            );
+        } catch (\Exception $e) {
+            $this->logger->error("Tmoney CashOut error: " . $e->getMessage());
+
+            return new PaymentResponse(
+                success: false,
+                message: $e->getMessage(),
+                transactionId: null,
+                status: PaymentStatus::ERROR
+            );
+        }
+    }
+
+    public function cashOutStatus(string $refTmoney): PaymentResponse {
+        $token  = $this->getAccessToken();
+
+        try {
+            $token = $this->getAccessToken();
+            if ($token === null || $token === '' || $token === '0') {
+                throw new PaymentException("Failed to obtain access token");
+            }
+
+            $data = [
+                "idTrans" => $refTmoney,
+                "billerAlias" => $this->alias,
+                "username" => $this->username,
+                "api" => "mbanking"
+            ];
+
+            $queryString = http_build_query($data);
+            $response = $this->client->request(
+                'GET',
+                $this->cashOutStatusUrl . "?" . $queryString,
+                [
+                    'headers' => [
+                        'Accept' => 'application/json',
+                        'Content-Type' => 'application/json',
+                        "Authorization" => "Bearer " . $token,
+                    ],
+                ]
+            );
+
+            $result = $response->toArray();
+            $this->logger->info("Tmoney CashOut Status Check: ref -> $refTmoney");
+
+            return new PaymentResponse(
+                success: $result['code'] === '0',
+                message: $result['message'] ?? 'Unknown response',
+                transactionId: $result['refTmoney'] ?? null,
+                status: $result['code'] === '0' ? PaymentStatus::SUCCESS : PaymentStatus::PENDING,
+                rawResponse: $result
+            );
+        } catch (\Exception $e) {
+            $this->logger->error("Tmoney CashOut Status Check error: " . $e->getMessage());
+
+            return new PaymentResponse(
+                success: false,
+                message: $e->getMessage(),
+                status: PaymentStatus::ERROR
+            );
+        }
+    }
     private function getAccessToken(): ?string
     {
         try {
