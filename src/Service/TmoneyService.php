@@ -8,7 +8,6 @@ use Geekabel\MobileMoneyPayment\Enum\PaymentStatus;
 use Geekabel\MobileMoneyPayment\Exception\PaymentException;
 use Geekabel\MobileMoneyPayment\Interface\PaymentServiceInterface;
 use Geekabel\MobileMoneyPayment\Model\PaymentResponse;
-use PhpParser\Node\Stmt\TryCatch;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Contracts\HttpClient\HttpClientInterface;

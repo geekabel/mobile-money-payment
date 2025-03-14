@@ -144,7 +144,7 @@ class PaymentController extends AbstractController
     {
         // Generate a unique reference
         $reference = 'REF' . Uuid::v4()->toRfc4122();
-        $response = $paymentManager->pay('tmoney', '1234567890', 100.00, 'REF' . uniqid(), 'Test payment');
+        $response = $paymentManager->pay('tmoney', '1234567890', 100.00, $reference, 'Test payment');
 
         if ($response->isSuccess()) {
             return $this->json([
