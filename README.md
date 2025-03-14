@@ -152,7 +152,7 @@ The package uses `PaymentException` for specific payment-related errors. It's re
 use MobileMoneyPayment\Exception\PaymentException;
 
 try {
-    $response = $paymentManager->pay('tmoney', '1234567890', 100.00, 'REF123');
+    $response = $paymentManager->pay('tmoney', '22892728588', 100.00, 'REF123');
 } catch (PaymentException $e) {
     echo "Payment error: " . $e->getMessage();
 } catch (\Exception $e) {
@@ -177,9 +177,11 @@ $tmoneyService = new TmoneyService(
     // ... other parameters
 );
 ```
+
 ## Symfony Integration
 
 For detailed instructions on how to integrate this package with Symfony 6.4, 7.0, 7.1, and superior versions, please refer to our [Symfony Integration Guide](docs/SYMFONY_INTEGRATION.md).
+
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
